@@ -1,0 +1,58 @@
+<div class="card-body">
+    <div class="dataTable-top">
+        <div class="dataTable-dropdown"><label><select class="dataTable-selector">
+                    <option value="5">5</option>
+                    <option value="10" selected="">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                </select> entries per page</label></div>
+        <div class="dataTable-search"><input class="dataTable-input" placeholder="Search..." type="text"></div>
+    </div>
+    <!-- Table with stripped rows -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Sr. No.</th>
+                <th scope="col">Project Image</th>
+                <th scope="col">Project Name</th>
+                <th scope="col">Project URL</th>
+                <th scope="col">Technologies</th>
+                <th scope="col">order</th>
+                <th scope="col">View</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let project of projectList$;index as i">
+                <th scope="row">{{i}}</th>
+                <!-- <td>{{'project.ProjectImageUrl'}}</td> -->
+                <td>
+                    <div *ngIf="project.imageUrl;else elseBlock">
+                        <img [src]="project.imageUrl" style="width: 100px;height: 100px;">
+                    </div>
+                    <ng-template #elseBlock>
+                        {{'N/A'}}
+                    </ng-template>
+                    
+                </td>
+                <td>{{project.ProjectName}}</td>
+                <td>{{project.ProjectUrl}}</td>
+                <td>{{project.ProjectTechnologies}}</td>
+                <td>{{project.ProjectIndex}}</td>
+                <td>{{project.index}}</td>
+                <td>
+                    <i class='bx bx-edit bx-md'></i>
+                    <i class='bx bxs-trash-alt bx-md' (click)="removeitem(project.id)"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="dataTable-bottom">
+        <div class="dataTable-info">Showing 1 to 5 of 5 entries</div>
+        <nav class="dataTable-pagination">
+            <ul class="dataTable-pagination-list"></ul>
+        </nav>
+    </div> <!-- End Table with stripped rows -->
+
+</div>

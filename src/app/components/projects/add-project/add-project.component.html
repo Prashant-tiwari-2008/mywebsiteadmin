@@ -1,0 +1,82 @@
+<form [formGroup]="ProjectForm" (ngSubmit)="onSubmit(ProjectForm)">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 heading">
+            <h2><strong>ADD PROJECT</strong></h2>
+        </div>
+        <div class="col-lg-8 col-md-8">
+
+            <div class="form-outline mb-4">
+                <label class="form-label" for="form6Example1"><strong>Project Name *</strong></label>
+                <input type="text" formControlName="ProjectName" class="form-control" />
+                <div
+                    *ngIf="ProjectForm.get('ProjectName')?.invalid && (ProjectForm.get('ProjectName')?.dirty || ProjectForm.get('ProjectName')?.touched)">
+                    <span style="color: red;"> Please provide a Project Name.</span>
+                </div>
+            </div>
+
+            <div class="form-outline mb-4">
+                <label class="form-label" for="form6Example2"><strong> Project Technologies </strong></label>
+                <input type="text" id="form6Example2" class="form-control" formControlName="ProjectTechnologies" />
+                <div
+                    *ngIf="ProjectForm.get('ProjectTechnologies')?.invalid && (ProjectForm.get('ProjectTechnologies')?.dirty || ProjectForm.get('ProjectTechnologies')?.touched)">
+                    <span style="color: red;"> Please provide a Project Technologies.</span>
+                </div>
+            </div>
+
+
+            <!-- Text input -->
+            <div class="form-outline mb-4">
+                <label class="form-label" for="form6Example3"><strong> Project URL </strong></label>
+                <input type="text" id="form6Example3" class="form-control" formControlName="ProjectUrl" />
+                <div
+                    *ngIf="ProjectForm.get('ProjectUrl')?.invalid && (ProjectForm.get('ProjectUrl')?.dirty || ProjectForm.get('ProjectUrl')?.touched)">
+                    <span style="color: red;"> Please provide a Project URL.</span>
+
+                </div>
+            </div>
+
+            <!-- Text input -->
+            <div class="form-outline mb-4">
+                <label class="form-label" for="form6Example4"><strong> Project Index </strong></label>
+                <input type="text" id="form6Example4" class="form-control" formControlName="ProjectIndex" />
+                <div
+                    *ngIf="ProjectForm.get('ProjectIndex')?.invalid && (ProjectForm.get('ProjectIndex')?.dirty || ProjectForm.get('ProjectIndex')?.touched)">
+                    <span style="color: red;"> Please provide a Project Index.</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <div class="imagediv">
+                <span *ngIf="imgURL ; else blankSpace">
+                    <img class="image" [src]="imgURL" *ngIf="imgURL">
+                    <i (click)="RemoveImage()" class='bx bxs-trash-alt bx-md bx-color-red' color="red"></i>
+
+                    <!-- TODO: button should be align properly -->
+                    <!-- <button type="btn" class="btn btn-success" (click)="uploadImage()">uploadImage</button>
+                    <button type="btn" class="btn btn-danger" (click)="RemoveImage()">RemoveImage</button> -->
+                </span>
+                <ng-template #blankSpace>
+                    <span>
+                        <input class="blankSpace" type="file" accept="image/*" (change)="selectFile($event)">
+                    </span>
+                </ng-template>
+            </div>
+
+        </div>
+
+        <!-- Angular Editor -->
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <label class="form-label" for="form6Example4"><strong> Project Editor </strong></label>
+                <angular-editor placeholder='Enter text here...' [config]="config" class="form-control"
+                    formControlName="ProjectEditor">
+                </angular-editor>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit button -->
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary btn-block submitButton">Add-Project</button>
+    </div>
+</form>

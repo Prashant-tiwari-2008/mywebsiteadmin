@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "mywebsiteadmin-d59cb": {
+      "hosting": {
+        "adminPortal": [
+          "mywebsiteadmin-d59cb"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "mywebsiteadmin-d59cb"
+  }
+}
