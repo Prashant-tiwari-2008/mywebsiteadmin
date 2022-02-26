@@ -10,9 +10,6 @@ import { CREATED, DELETED } from '../_helper/messages';
   providedIn: 'root'
 })
 export class ProjectService<T> {
-
-  public ImageUrl: string = ''
-  public ImageName: string = ''
   public projectList$: AngularFireList<any>
 
 

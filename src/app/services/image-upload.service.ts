@@ -17,19 +17,9 @@ export class ImageUploadService {
   imageURL: string = '';
   constructor(private db: AngularFireDatabase, private storage: AngularFireStorage, private _projectService: ProjectService<Project>) { }
 
-  async pushFileToStorage(fileUpload: any) {
-    var filepath = `${Entities.Upload}${`/project/`}${fileUpload!.name.split('.').slice(0, -1).join('.')}_${new Date().getTime()}`
-    const fileRef = this.storage.ref(filepath)
-    await this.storage.upload(filepath, fileUpload.file).snapshotChanges().pipe(
-      finalize(() => {
-        fileRef.getDownloadURL().subscribe((downloadURL) => {
-          this.imageURL = downloadURL;
-          console.log("image url", this.imageURL)
-        });
-      })
-    )
-    return this.imageURL
-    
+  pushFileToStorage(filepath: string, file: any): Observable<any> {
+    const uploadStatus = this.storage.upload(filepath, file).snapshotChanges()
+    return uploadStatus;
   }
 
   // pushFileToStorage(fileUpload: any): Observable<number> {

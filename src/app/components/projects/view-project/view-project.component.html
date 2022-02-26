@@ -25,24 +25,22 @@
         </thead>
         <tbody>
             <tr *ngFor="let project of projectList$;index as i">
-                <th scope="row">{{i}}</th>
-                <!-- <td>{{'project.ProjectImageUrl'}}</td> -->
+                <td scope="row">{{i}}</td>
                 <td>
                     <div *ngIf="project.imageUrl;else elseBlock">
-                        <img [src]="project.imageUrl" style="width: 100px;height: 100px;">
+                        <img [src]="project.imageUrl" style="width: 70px;height: 70px;">
                     </div>
                     <ng-template #elseBlock>
                         {{'N/A'}}
                     </ng-template>
-                    
                 </td>
                 <td>{{project.ProjectName}}</td>
                 <td>{{project.ProjectUrl}}</td>
                 <td>{{project.ProjectTechnologies}}</td>
                 <td>{{project.ProjectIndex}}</td>
-                <td>{{project.index}}</td>
+                <td>{{project.ProjectIndex}}</td>
                 <td>
-                    <i class='bx bx-edit bx-md'></i>
+                    <i class='bx bx-edit bx-md' (click)="editProject(project)"></i>
                     <i class='bx bxs-trash-alt bx-md' (click)="removeitem(project.id)"></i>
                 </td>
             </tr>

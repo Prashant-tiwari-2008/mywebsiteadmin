@@ -1,10 +1,10 @@
 export interface Project {
-    Key:string
+    Key: string
     ProjectName: string;
     ProjectTechnologies: string;
     ProjectUrl: string;
     ProjectIndex: string;
     ProjectEditor: string;
-    ProjectImageUrl?: any;
+    ProjectImageUrl?: string;
     ImageName: string
 }

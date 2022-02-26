@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { async } from '@firebase/util';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { finalize } from 'rxjs/operators';
+import { Entities } from 'src/app/core/models/entites.model';
 import { FileUpload } from 'src/app/core/models/file-upload';
 import { Project } from 'src/app/core/models/project.model';
 import { ImageUploadService } from 'src/app/services/image-upload.service';
 import { ProjectService } from 'src/app/services/project.service';
+import { NgxSpinnerService } from "ngx-spinner";
 
 
 @Component({
@@ -21,31 +25,33 @@ export class AddProjectComponent implements OnInit {
   public percentage: number | undefined = 0;
   public message: string = ""
   public imagePath: string = ""
-  public imgURL: any = ""
-  public url: any = '';
+  public imgURL: string | ArrayBuffer | null = ""
+  public url: string = '';
+  public fileUpload: string = ''
   //configuration of angular editor
   config: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
     height: '10rem',
     minHeight: '8rem',
-    placeholder: 'Enter text here...',
-    translate: 'no',
-    defaultParagraphSeparator: 'p',
-    defaultFontName: 'Arial',
-    toolbarHiddenButtons: [
-      ['bold']
-    ],
   }
 
-  constructor(private _fb: FormBuilder, private _imageUploadService: ImageUploadService, private _projectService: ProjectService<any>) { }
+  constructor(private _fb: FormBuilder, private storage: AngularFireStorage,
+    private _imageUploadService: ImageUploadService,
+    private spinner: NgxSpinnerService,
+    private _projectService: ProjectService<any>) { }
 
 
   ngOnInit(): void {
     this.ProjectFormData()
   }
 
-  selectFile(event: any): void {
+  /**
+   * @param event 
+   * @returns 
+   * Selecting image from localStorage
+   */
+  public selectFile(event: any): void {
     this.selectedFiles = event.target.files;
     if (event.target.files.length === 0)
       return;
@@ -63,30 +69,18 @@ export class AddProjectComponent implements OnInit {
     }
   }
 
-
-  RemoveImage() {
+  /**
+   * Deleting the preview image before sending to firebase storage
+   */
+  public RemoveImage(): void {
     this.message = '';
     this.imagePath = '';
     this.imgURL = ''
   }
 
-  // uploadImage() {
-  //   if (this.selectedFiles) {
-  //     const file = this.selectedFiles.item(0);
-  //     this.selectedFiles = undefined
-  //     if (file) {
-  //       this.currentFileUpload = new FileUpload(file)
-  //       this._imageUploadService.pushFileToStorage(this.currentFileUpload).subscribe((percentage: number | undefined) => {
-  //         this.percentage = percentage
-  //       }, error => {
-  //         console.log("error in uploading file", error)
-  //       }), (err: any) => {
-  //         console.log(err.error.msg)
-  //       }
-  //     }
-  //   }
-  // }
-
+  /**
+   * Getting from value
+   */
   private ProjectFormData(): void {
     this.ProjectForm = this._fb.group({
       ProjectName: ['', Validators.required],
@@ -97,22 +91,32 @@ export class AddProjectComponent implements OnInit {
     })
   }
 
-  onSubmit(ProjectFormValue: any) {
+  /**
+   * @param ProjectFormValue 
+   * Getting the image url from image-upload service
+   * attaching url to form data and send to 
+   * add create project method
+   */
+  public onSubmit(ProjectFormValue: any): void {
     if (ProjectFormValue.valid == true) {
       this.Submitted = true;
     }
-    debugger
     if (this.selectedFiles) {
+      this.spinner.show();
       const file = this.selectedFiles.item(0);
-      this.url = this._imageUploadService.pushFileToStorage(file);
-      console.log("this url",this.url)
-      if (this.url !== undefined) {
-        // this._projectService.create({ ...ProjectFormValue.value, imageUrl: this.url });
-        // this.ProjectForm.reset();
-      }else{
-        alert("image uploading taking tim")
-      }
-
+      var filepath = `${Entities.Upload}${`/project/`}${file!.name.split('.').slice(0, -1).join('.')}_${new Date().getTime()}`
+      const fileRef = this.storage.ref(filepath)
+      this._imageUploadService.pushFileToStorage(filepath, file).subscribe((res: any) => {
+        if (res) {
+          fileRef.getDownloadURL().subscribe((downloadURL) => {
+            this.fileUpload = downloadURL;
+            console.log("this file ulr", this.fileUpload);
+            this._projectService.create({ ...ProjectFormValue.value, imageUrl: this.fileUpload })
+            this.spinner.hide();
+          })
+        }
+      })
     }
   }
+
 }

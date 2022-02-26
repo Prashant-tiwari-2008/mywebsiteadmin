@@ -6,7 +6,7 @@ import { AddProjectComponent } from './add-project/add-project.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { ViewProjectComponent } from './view-project/view-project.component';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { NgxSpinnerModule } from "ngx-spinner";
 
 @NgModule({
   declarations: [
@@ -17,7 +17,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     ProjectsRoutingModule,
     AngularEditorModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxSpinnerModule
   ]
 })
 export class ProjectsModule { }

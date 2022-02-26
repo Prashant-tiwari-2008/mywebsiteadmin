@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit(loginForm: login) {
     debugger;
-    if (loginForm.value.username === 'Prashant' && loginForm.value.password === '12345') {
+    if (loginForm.value.username === 'Prashant' && loginForm.value.password === '123456789') {
       this.router.navigateByUrl('/dashboard')
     }else{
       //TODO: NEED TO WORK ON SWEETALERT
